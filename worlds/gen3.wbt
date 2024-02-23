@@ -1,0 +1,66 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/ThreadMetalPlate.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/solids/protos/SolidBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/GalvanizedMetal.proto"
+EXTERNPROTO "../protos/GEN3-6DOF_VISION.proto"
+EXTERNPROTO "../protos/Robotiq2f140Gripper.proto"
+
+WorldInfo {
+  info [
+    "Unviversal Robot UR3e, UR5e and UR10e grasping cans using Robotiq 3F grippers."
+  ]
+  title "Universal Robot"
+  basicTimeStep 16
+  physicsDisableAngularThreshold 0.1
+  contactProperties [
+    ContactProperties {
+      bounce 0.1
+    }
+    ContactProperties {
+      material1 "slope"
+      coulombFriction [
+        0.5
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.030001340405350456 -0.010273139995099451 0.9994970646122596 4.6854927916528855
+  position 0.3505566821180387 3.399007960949705 0.7381748835642884
+  exposure 1.7
+}
+TexturedBackground {
+  texture "factory"
+}
+Floor {
+  size 20 20
+  appearance ThreadMetalPlate {
+  }
+}
+SolidBox {
+  translation 0 0 0.3
+  size 0.3 0.3 0.6
+  appearance GalvanizedMetal {
+    textureTransform TextureTransform {
+      scale 2 2
+    }
+  }
+}
+GEN3-6DOF_VISION {
+  name "Gen3"
+  controller "<extern>"
+  translation 0 0 0.6
+  toolSlot [
+    Robotiq2f140Gripper {
+      rotation -0.577349935856137 0.577349935856137 0.5773509358560258 2.09439
+    }
+  ]
+}
+Robot {
+  name "Ros2Supervisor"
+  controller "<extern>"
+  supervisor TRUE
+}
