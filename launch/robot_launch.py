@@ -97,7 +97,7 @@ def generate_launch_description():
     )
     ros2_supervisor = Ros2SupervisorLauncher()
 
-    with open(os.path.join(package_dir, "urdf", "gen3.urdf")) as f:
+    with open(os.path.join(package_dir, "resource", "gen3.urdf")) as f:
         robot_desc = f.read()
 
     robot_state_publisher = Node(

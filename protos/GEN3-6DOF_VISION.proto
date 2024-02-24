@@ -14,6 +14,7 @@ PROTO GEN3-6DOF_VISION [
   field SFBool     synchronization TRUE              # Is `Robot.synchronization`.
   field SFBool     selfCollision   TRUE              # Is `Robot.selfCollision`.
   field MFNode     toolSlot        []                # Extend the robot with new nodes at the end of the arm.
+  field MFNode     cameraSlot      []                # Extend the robot with new nodes at the end of the arm.
   field SFBool     staticBase      TRUE              # Defines if the robot base should ba pinned to the static environment.
 ]
 {
@@ -298,6 +299,9 @@ PROTO GEN3-6DOF_VISION [
                                             translation 0.000000 0.000000 -0.061525
                                             rotation -1 0 0 1.5708
                                             children IS toolSlot
+                                          }
+                                          Transform {
+                                            children IS cameraSlot
                                           }
                                         ]
                                         name "Bracelet_Link"
