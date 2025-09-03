@@ -69,6 +69,10 @@ jobs:
       - name: Install Webots Gen3 Dependencies
         run: |
           cd ~/ros2_ws
+          cd src
+          git clone https://github.com/skpawar1305/ros2_robotiq_description
+          git clone https://github.com/PickNikRobotics/pick_ik
+          cd ..
           source /opt/ros/humble/setup.bash
           sudo rosdep init
           rosdep update
