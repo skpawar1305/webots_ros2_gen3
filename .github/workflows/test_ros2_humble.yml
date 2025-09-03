@@ -74,7 +74,6 @@ jobs:
           rosdep update
           sudo apt remove -y libmagickcore-dev
           rosdep install --from-paths ./ --ignore-src -y
-          chmod +x src/webots_ros2/webots_ros2_driver/webots_ros2_driver/ros2_supervisor.py
       - name: Build Packages
         run: |
           cd ~/ros2_ws
