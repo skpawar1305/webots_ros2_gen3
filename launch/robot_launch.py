@@ -22,9 +22,7 @@ package_dir = get_package_share_directory("webots_gen3")
 # Define all the ROS 2 nodes that need to be restart on simulation reset here
 def get_ros2_nodes(*args):
     # Driver node
-    ros2_control_params = os.path.join(
-        package_dir, "config", "ros2_controllers.yaml"
-    )
+    ros2_control_params = os.path.join(package_dir, "config", "ros2_controllers.yaml")
     driver = WebotsController(
         robot_name="Gen3",
         parameters=[
@@ -88,7 +86,7 @@ def get_ros2_nodes(*args):
         output="screen",
     )
 
-    return [driver, waiting_nodes]#, initial_manipulator_positioning]
+    return [driver, waiting_nodes]  # , initial_manipulator_positioning]
 
 
 def generate_launch_description():

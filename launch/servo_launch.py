@@ -28,7 +28,6 @@ def generate_launch_description():
     def load_yaml(filename):
         return yaml.safe_load(load_file(filename))
 
-
     # Get parameters for the Servo node
     servo_params = {
         "moveit_servo": ParameterBuilder("webots_gen3")
