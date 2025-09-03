@@ -29,6 +29,8 @@
         <joint name="joint_5" value="−1.03387"/>
         <joint name="joint_6" value="1.5708"/>
     </group_state>
+    <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
+    <passive_joint name="right_finger_joint"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="base_link" link2="bicep_link" reason="Never"/>
     <disable_collisions link1="base_link" link2="shoulder_link" reason="Adjacent"/>
