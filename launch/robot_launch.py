@@ -106,7 +106,11 @@ def get_ros2_nodes(*args):
         executable="mimic_gripper_finger",
         output="screen",
     )
-    return [driver, waiting_nodes, mimic_gripper_finger_node]  # , initial_manipulator_positioning]
+    return [
+        driver,
+        waiting_nodes,
+        mimic_gripper_finger_node,
+    ]  # , initial_manipulator_positioning]
 
 
 def generate_launch_description():

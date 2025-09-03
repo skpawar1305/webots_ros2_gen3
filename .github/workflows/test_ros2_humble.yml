@@ -5,7 +5,8 @@ on:
     types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches:
-      - main
+      - 2f85
+      - 2f140
   schedule:
     - cron:  '0 10 * * *'
 
