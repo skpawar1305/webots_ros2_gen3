@@ -6,7 +6,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/solids/protos/SolidBox.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/GalvanizedMetal.proto"
 EXTERNPROTO "../protos/GEN3-6DOF_VISION.proto"
-EXTERNPROTO "../protos/Robotiq2f140Gripper.proto"
+EXTERNPROTO "../protos/Robotiq2f85Gripper.proto"
 
 WorldInfo {
   info [
@@ -55,7 +55,7 @@ GEN3-6DOF_VISION {
   controller "<extern>"
   staticBase TRUE
   toolSlot [
-    Robotiq2f140Gripper {
+  Robotiq2f85Gripper {
       rotation -0.577349935856137 0.577349935856137 0.5773509358560258 2.09439
     }
   ]
