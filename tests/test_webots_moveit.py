@@ -3,7 +3,6 @@
 import os
 import pytest
 import rclpy
-from nav_msgs.msg import Odometry
 from sensor_msgs.msg import JointState
 from launch import LaunchDescription
 import launch_testing.actions
@@ -98,7 +97,7 @@ def generate_test_description():
             os.path.join(
                 get_package_share_directory("webots_gen3"),
                 "launch",
-                "gen3_launch.py",
+                "robot_launch.py",
             )
         ),
         launch_arguments={"mode": "fast"}.items(),
@@ -145,7 +144,7 @@ class TestGen3(TestWebots):
 
         def on_joint_state_message_received(message):
             for name, position in zip(message.name, message.position):
-                if name == "gen3arm_6_joint":
+                if name == "joint_2":
                     if position < -0.5:
                         return True
             return False
