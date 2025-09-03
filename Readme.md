@@ -1,7 +1,7 @@
 
 # Webots ROS2 Gen3
 
-[![ROS2 Humble](https://github.com/skpawar1305/webots_ros2_gen3/actions/workflows/test_ros2_humble.yml/badge.svg?branch=main)](https://github.com/skpawar1305/webots_ros2_gen3/actions/workflows/test_ros2_humble.yml)
+[![ROS2 Humble](https://github.com/skpawar1305/webots_ros2_gen3/actions/workflows/test_ros2_humble.yml/badge.svg?branch=2f85)](https://github.com/skpawar1305/webots_ros2_gen3/actions/workflows/test_ros2_humble.yml)
 
 This is a ROS 2 package to simulate the Kinova Gen3 robot in [Webots](https://cyberbotics.com/). The package supports MoveIt2 integration, gripper, and example launch files for simulation and motion planning.
 
