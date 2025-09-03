@@ -33,8 +33,8 @@ This is a ROS 2 package to simulate the Kinova Gen3 robot in [Webots](https://cy
     ```
     cd $COLCON_WS
     git clone https://github.com/skpawar1305/webots_ros2_gen3 src/webots_ros2_gen3
-    rosdep install --ignore-src --from-paths src -y -r
     vcs import --recursive src --skip-existing --input src/webots_ros2_gen3/webots_ros2_gen3.repos
+    rosdep install --ignore-src --from-paths src -y -r
     chmod +x src/webots_ros2/webots_ros2_driver/webots_ros2_driver/ros2_supervisor.py
     ```
 
