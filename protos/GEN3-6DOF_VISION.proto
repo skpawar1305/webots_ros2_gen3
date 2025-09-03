@@ -283,6 +283,7 @@ PROTO GEN3-6DOF_VISION [
                                               metalness 0
                                               emissiveColor 0.000000 0.000000 0.000000
                                             }
+                                            castShadows FALSE
                                             geometry DEF bracelet_with_vision_link IndexedFaceSet {
                                               coord Coordinate {
                                                 point [
@@ -415,13 +416,13 @@ PROTO GEN3-6DOF_VISION [
         }
       ]
     }
-    %{ if fields.staticBase.value == false then }%
+    %< if (!fields.staticBase.value) { >%
     physics Physics {
       density -1
       mass 1.697000
       centerOfMass [ -0.000648 -0.000166 0.084487 ]
     }
-    %{ end }%
+    %< } >%
     controller IS controller
     controllerArgs IS controllerArgs
     supervisor IS supervisor
