@@ -10,7 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(ament_lint_auto)
 
 install(
-  DIRECTORY config launch protos resource worlds
+  DIRECTORY config launch protos resource worlds controllers
   DESTINATION share/${PROJECT_NAME}
 )
 

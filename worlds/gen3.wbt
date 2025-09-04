@@ -1,4 +1,4 @@
-#VRML_SIM R2023b utf8
+#VRML_SIM R2025a utf8
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
@@ -28,8 +28,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.05998911068037595 0.024911932295908757 0.9978881210982832 2.665281830917653
-  position 0.9914109875554717 -0.45945906119403773 1.8831242558973431
+  orientation -0.20836211234073831 0.1949747767399572 0.9584206104712636 1.7692918122173455
+  position 0.8220347264353959 -3.3345507437209174 2.3871120748814976
   exposure 1.7
 }
 TexturedBackground {
@@ -49,11 +49,33 @@ SolidBox {
     }
   }
 }
-GEN3-6DOF_VISION {
+SolidBox {
+  translation 0.47 0 0.2
+  name "cube_table"
+  size 0.6 0.6 0.4
+  appearance GalvanizedMetal {
+    colorOverride 0.7 0.5 0.3
+    textureTransform TextureTransform {
+      scale 2 2
+    }
+  }
+}
+DEF GREEN SolidBox {
+  translation 0.6 0.12 0.43
+  name "GREEN"
+  size 0.05 0.05 0.05
+  appearance PBRAppearance {
+    baseColor 0 1 0
+    roughness 0.5
+    metalness 0
+  }
+  physics Physics {
+  }
+}
+DEF GEN3 GEN3-6DOF_VISION {
   translation 0 0 0.6
   name "Gen3"
   controller "<extern>"
-  staticBase TRUE
   toolSlot [
     Robotiq2f140Gripper {
       rotation -0.577349935856137 0.577349935856137 0.5773509358560258 2.09439
@@ -62,24 +84,29 @@ GEN3-6DOF_VISION {
   cameraSlot [
     Camera {
       translation 0 0.06 -0.06
-      rotation -0.57735 0.57735 0.57735 2.0944
+      rotation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
       name "kinova_color"
       width 640
       height 480
     }
     RangeFinder {
       translation 0 0.06 -0.06
-      rotation -0.57735 0.57735 0.57735 2.0944
+      rotation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
       name "kinova_depth"
+      fieldOfView 1.57
       width 424
       height 240
-      maxRange 10.0
-      fieldOfView 1.57
+      maxRange 10
     }
   ]
 }
 Robot {
   name "Ros2Supervisor"
   controller "<extern>"
+  supervisor TRUE
+}
+Robot {
+  name "CubeRandomizer"
+  controller "cube_randomizer"
   supervisor TRUE
 }

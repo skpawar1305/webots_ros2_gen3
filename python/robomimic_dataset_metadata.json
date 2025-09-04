@@ -1,0 +1,15 @@
+{
+  "env": "KinovaGen3PickPlace",
+  "type": "demo",
+  "env_args": {},
+  "obs": {
+    "modalities": {
+      "obs": ["joints", "image"]
+    }
+  },
+  "actions": {
+    "type": "joint"
+  },
+  "num_episodes": 0,
+  "env_metadata": {}
+}

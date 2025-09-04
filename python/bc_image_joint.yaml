@@ -1,0 +1,11 @@
+observation:
+  modalities:
+    obs: ["joints", "image"]
+dataset: /path/to/robomimic_dataset.hdf5
+algo_name: bc
+train:
+  data: /path/to/robomimic_dataset.hdf5
+  output_dir: /path/to/output
+  num_epochs: 100
+  batch_size: 128
+  save_every: 10

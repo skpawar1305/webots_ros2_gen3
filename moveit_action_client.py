@@ -39,6 +39,7 @@ class MoveGroupActionClient(Node):
         joint_angles = [0, -106, -148, 0, -59, 90]  # NUC REST
         joint_angles = [0, 15, -130, 0, 55, 90]  # HOME
         joint_angles = [ja * 3.141592 / 180 for ja in joint_angles]
+        joint_angles = [0., 0.34, -1.34, 0., -1.44, 1.56]
 
         joints = {}
         joints["joint_1"] = joint_angles[0]
