@@ -11,6 +11,7 @@ from sensor_msgs.msg import JointState
 from moveit_msgs.srv import GetPositionIK
 import time
 import numpy as np
+from moveit_msgs.msg import OrientationConstraint, Constraints
 
 
 joints_to_consider = [
@@ -155,6 +156,22 @@ class MinimalClientAsync(Node):
         req.ik_request.pose_stamped = pose_stamped
         req.ik_request.robot_state.joint_state = deepcopy(self.joint_state)
         req.ik_request.avoid_collisions = True
+
+        # --- Add single-axis orientation constraint ---
+        ocm = OrientationConstraint()
+        ocm.link_name = "ee_link"                # Replace with your end-effector link
+        ocm.header.frame_id = pose_stamped.header.frame_id
+        ocm.orientation = pose_stamped.pose.orientation  # Target orientation
+        ocm.absolute_x_axis_tolerance = 0.01     # Tight tolerance = ignore rotation X
+        ocm.absolute_y_axis_tolerance = 0.01     # Tight tolerance = ignore rotation Y
+        ocm.absolute_z_axis_tolerance = 0.1      # Large tolerance = correct Z
+        ocm.weight = 1.0
+
+        constraints = Constraints()
+        constraints.orientation_constraints.append(ocm)
+        req.ik_request.constraints = constraints
+        # --------------------------------------------
+
         future = self.cli.call_async(req)
         rclpy.spin_until_future_complete(self, future)
         if future.result() and future.result().error_code.val == 1:

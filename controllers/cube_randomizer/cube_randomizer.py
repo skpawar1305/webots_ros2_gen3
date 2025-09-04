@@ -107,11 +107,11 @@ class CubeRandomizer(Supervisor):
         while yaw_deg < -180:
             yaw_deg += 360
         # Then, wrap to [-90, 90]
-        while yaw_deg > 90:
-            yaw_deg -= 180
-        while yaw_deg < -90:
-            yaw_deg += 180
-        yaw_norm = np.radians(yaw_deg)
+        while yaw_deg < -45:
+            yaw_deg += 90
+        while yaw_deg > 45:
+            yaw_deg -= 90
+        yaw_norm = np.radians(-yaw_deg-90)
         # Compose quaternion for wrapped yaw
         wrapped_quat = tf_transformations.quaternion_about_axis(yaw_norm, [0,0,1])
         # Apply 180-degree rotation about X to flip Z axis down

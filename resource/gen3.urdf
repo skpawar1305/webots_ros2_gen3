@@ -564,7 +564,7 @@
 	</joint>
 	<link name="gripper_centre"/>
 	<joint name="gripper_centre_joint" type="fixed">
-		<origin rpy="0 0 0" xyz="0 0 0.21"/>
+		<origin rpy="0 0 0" xyz="0 0 0.22"/>
 		<parent link="end_effector_link"/>
 		<child link="gripper_centre"/>
 	</joint>
