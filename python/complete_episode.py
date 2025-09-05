@@ -9,6 +9,7 @@ from tf2_ros import Buffer, TransformListener
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import JointState
 from moveit_msgs.srv import GetPositionIK
+from gripper_action_client import GripperClient
 import time
 import numpy as np
 from moveit_msgs.msg import OrientationConstraint, Constraints
@@ -217,6 +218,14 @@ class CompleteEpisode(Node):
         future.add_done_callback(self._randomize_done)
 
     def _randomize_done(self, future):
+        # Open the gripper before approaching the cube
+        try:
+            gripper = GripperClient()
+            gripper.open()
+            gripper.destroy_node()
+        except Exception as e:
+            self.get_logger().warn(f'Failed to open gripper: {e}')
+
         self.get_logger().info('Cube randomized. Waiting 1 second...')
         time.sleep(1)
         self.tf_buffer.clear()
@@ -255,9 +264,36 @@ class CompleteEpisode(Node):
             moveit_client = MoveGroupActionClient()
             moveit_client.set_joint_angles(at_joint_angles)
             moveit_client.send_goal()
-            self.get_logger().info('Moved to the cube. Sequence complete.')
+            # Wait for MoveGroup action to finish
+            while not hasattr(moveit_client, '_get_result_future'):
+                rclpy.spin_once(moveit_client, timeout_sec=0.1)
+            while not moveit_client._get_result_future.done():
+                rclpy.spin_once(moveit_client, timeout_sec=0.1)
             self.done = True
 
+        # Close the gripper after reaching the cube
+        try:
+            gripper = GripperClient()
+            gripper.close()
+            # Wait for MoveGroup action to finish
+            while not hasattr(gripper, '_get_result_future'):
+                rclpy.spin_once(gripper, timeout_sec=0.1)
+            while not gripper._get_result_future.done():
+                rclpy.spin_once(gripper, timeout_sec=0.1)
+            gripper.destroy_node()
+        except Exception as e:
+            self.get_logger().warn(f'Failed to close gripper: {e}')
+
+        moveit_client = MoveGroupActionClient()
+        moveit_client.set_joint_angles([0., 0.34, -1.34, 0., -1.44, 1.56])
+        moveit_client.send_goal()
+        # Wait for MoveGroup action to finish
+        while not hasattr(moveit_client, '_get_result_future'):
+            rclpy.spin_once(moveit_client, timeout_sec=0.1)
+        while not moveit_client._get_result_future.done():
+            rclpy.spin_once(moveit_client, timeout_sec=0.1)
+
+        exit(0)
 
 def main(args=None):
     rclpy.init(args=args)

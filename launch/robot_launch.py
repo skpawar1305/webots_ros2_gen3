@@ -69,10 +69,24 @@ def get_ros2_nodes(*args):
         + controller_manager_timeout,
     )
 
+    right_finger_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        output="screen",
+        prefix=controller_manager_prefix,
+        arguments=[
+            "right_finger_controller",
+            "-c",
+            "/controller_manager",
+        ]
+        + controller_manager_timeout,
+    )
+
     ros2_control_spawners = [
         trajectory_controller_spawner,
         joint_state_broadcaster_spawner,
         robotiq_gripper_controller,
+        right_finger_controller_spawner,
     ]
 
     # Wait for the simulation to be ready to start RViz, the navigation and spawners
@@ -86,7 +100,12 @@ def get_ros2_nodes(*args):
         output="screen",
     )
 
-    return [driver, waiting_nodes]  # , initial_manipulator_positioning]
+    mimic_gripper_finger_node = Node(
+        package="webots_gen3",
+        executable="mimic_gripper_finger",
+        output="screen",
+    )
+    return [driver, waiting_nodes, mimic_gripper_finger_node]  # , initial_manipulator_positioning]
 
 
 def generate_launch_description():
