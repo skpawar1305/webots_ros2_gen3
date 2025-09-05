@@ -63,3 +63,11 @@ ros2 launch webots_gen3 moveit_launch.py
 - [ROS2 Documentation](https://docs.ros.org/en/humble/index.html)
 
 ```
+
+```
+python3 python/robomimic_logger.py
+```
+
+```
+for i in {1..100}; do     echo "Run $i/100";     python3 python/complete_episode.py; done
+```

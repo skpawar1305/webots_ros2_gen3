@@ -195,6 +195,15 @@ class CompleteEpisode(Node):
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting...')
         self.req = Trigger.Request()
+        # Clients to tell the logger to start/finish episodes
+        self.start_cli = self.create_client(Trigger, '/start_episode')
+        while not self.start_cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /start_episode service...')
+        self.finish_cli = self.create_client(Trigger, '/finish_episode')
+        while not self.finish_cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /finish_episode service...')
+        self.start_req = Trigger.Request()
+        self.finish_req = Trigger.Request()
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.done = False
@@ -242,6 +251,16 @@ class CompleteEpisode(Node):
                 trans = None
                 time.sleep(0.1)
 
+        # Notify logger to start buffering this episode
+        try:
+            self.get_logger().info('Calling /start_episode service...')
+            start_future = self.start_cli.call_async(self.start_req)
+            rclpy.spin_until_future_complete(self, start_future)
+            if start_future.result() is not None:
+                self.get_logger().info(f"/start_episode returned: {start_future.result().message}")
+        except Exception as e:
+            self.get_logger().warn(f'Failed to call /start_episode: {e}')
+
         # Prepare IK client
         ik_client = MinimalClientAsync()
         # Wait for joint state
@@ -275,11 +294,6 @@ class CompleteEpisode(Node):
         try:
             gripper = GripperClient()
             gripper.close()
-            # Wait for MoveGroup action to finish
-            while not hasattr(gripper, '_get_result_future'):
-                rclpy.spin_once(gripper, timeout_sec=0.1)
-            while not gripper._get_result_future.done():
-                rclpy.spin_once(gripper, timeout_sec=0.1)
             gripper.destroy_node()
         except Exception as e:
             self.get_logger().warn(f'Failed to close gripper: {e}')
@@ -292,6 +306,17 @@ class CompleteEpisode(Node):
             rclpy.spin_once(moveit_client, timeout_sec=0.1)
         while not moveit_client._get_result_future.done():
             rclpy.spin_once(moveit_client, timeout_sec=0.1)
+
+        if self.done:
+            # Notify logger to finish and save this episode
+            try:
+                self.get_logger().info('Calling /finish_episode service...')
+                finish_future = self.finish_cli.call_async(self.finish_req)
+                rclpy.spin_until_future_complete(self, finish_future)
+                if finish_future.result() is not None:
+                    self.get_logger().info(f"/finish_episode returned: {finish_future.result().message}")
+            except Exception as e:
+                self.get_logger().warn(f'Failed to call /finish_episode: {e}')
 
         exit(0)
 

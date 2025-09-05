@@ -1,0 +1,17 @@
+{
+  "observation": {
+    "modalities": {
+      "obs": {
+        "low_dim": ["joints"],
+        "rgb": ["image"]
+      }
+    }
+  },
+  "algo_name": "bc",
+  "train": {
+    "data": "robomimic_dataset.hdf5",
+    "output_dir": "output",
+    "num_epochs": 100,
+  "batch_size": 128
+  }
+}

@@ -1,10 +1,14 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState, Image
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import JointState, Image
 from std_srvs.srv import Trigger
 import h5py
 import numpy as np
 from cv_bridge import CvBridge
+
 
 class RobomimicLogger(Node):
     def __init__(self):
@@ -36,10 +40,17 @@ class RobomimicLogger(Node):
         joint_names = ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6', 'left_finger_joint']
         joint_pos = [msg.position[msg.name.index(j)] for j in joint_names]
         self.joints.append(joint_pos)
+        # also record left finger separately for convenience
+        try:
+            lf = msg.position[msg.name.index('left_finger_joint')]
+            self.left_finger.append(lf)
+        except Exception:
+            pass
 
     def image_cb(self, msg):
+        # keep images channel-last (H, W, C) so HDF5 matches robomimic expected layout
         cv_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
-        img = np.transpose(cv_img, (2, 0, 1))  # (3, H, W)
+        img = np.asarray(cv_img, dtype=np.uint8)  # (H, W, C)
         self.images.append(img)
 
     def finish_episode_cb(self, request, response):
@@ -57,10 +68,15 @@ class RobomimicLogger(Node):
             images_arr = np.array(self.images[:T-1], dtype=np.uint8)
             grp = self.h5.create_group(f'data/{self.episode_idx:04d}')
             grp.create_dataset('actions', data=actions)
-            obs_grp = grp.create_group('obs/obs')
+            # store observations under data/<ep>/obs/<key> as robomimic expects
+            obs_grp = grp.create_group('obs')
             obs_grp.create_dataset('joints', data=joints_arr)
-            obs_grp.create_dataset('left_finger_joint', data=left_finger_arr)
+            # left finger may be empty if not populated
+            if left_finger_arr.size > 0:
+                obs_grp.create_dataset('left_finger_joint', data=left_finger_arr)
             obs_grp.create_dataset('image', data=images_arr)
+            # record number of samples for this episode (used by utilities)
+            grp.attrs['num_samples'] = joints_arr.shape[0]
             self.h5.flush()
             self.episode_idx += 1
             self.reset_episode()
@@ -71,6 +87,7 @@ class RobomimicLogger(Node):
             response.message = str(e)
         return response
 
+
 def main(args=None):
     rclpy.init(args=args)
     node = RobomimicLogger()
@@ -78,6 +95,7 @@ def main(args=None):
     node.h5.close()
     node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()
