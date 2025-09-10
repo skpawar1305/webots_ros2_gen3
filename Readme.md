@@ -63,8 +63,6 @@ ros2 launch webots_gen3 moveit_launch.py
 - [ROS2 Documentation](https://docs.ros.org/en/humble/index.html)
 
 ```
-
-```
 python3 python/robomimic_logger.py
 ```
 
